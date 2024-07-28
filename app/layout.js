@@ -1,6 +1,6 @@
-// import { getUser, auth } from "@/appwrite/auth";
-// import { redirect } from "next/navigation";
 // import Header from "@/components/Header";
+import { redirect } from "next/navigation";
+import { auth } from "@/lib/appwrite/auth"
 import { Inter } from "next/font/google";
 import "./globals.css";
 
@@ -11,7 +11,13 @@ export const metadata = {
   description: "Soko247 Marketplace",
 };
 
-export default function RootLayout({ children }) {
+export default async function RootLayout({ children }) {
+  let user = await auth.getUser();
+
+  if (!user) {
+    redirect("/login");
+  } 
+
   return (
     <html lang="en">
       <body className={inter.className}>{children}</body>

@@ -1,4 +1,6 @@
 import Link from "next/link"
+import { redirect } from "next/navigation"
+import { auth } from "@/lib/appwrite/auth"
 import { Button } from "@/components/ui/button"
 import {
   Card,
@@ -11,39 +13,57 @@ import {
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 
-export default function Login() {
+export default async function Login() {
+  let user = await auth.getUser();
+
+  if (user) {
+    redirect("/");
+  }
+  
+  async function loginAction(formData) {
+    "use server"
+    // let data = Object.fromEntries(formData)
+    // console.log({data})
+    // const res = await signupUser(data)
+    const res = await auth.createSession(formData)
+    console.log({ res: res })
+  }
+
   return (
     <div className="container flex h-[100vH] flex-col items-center justify-center md:grid lg:max-w-none lg:grid-cols-1 lg:px-0">
       <Card className="mx-auto max-w-sm">
         <CardHeader>
           <CardTitle className="text-2xl">Login</CardTitle>
           <CardDescription>
-            Enter your credentials to login to your account
+            Login to your account
           </CardDescription>
         </CardHeader>
         <CardContent>
           <div className="grid gap-4">
-            <div className="grid gap-2">
-              <Label htmlFor="email">Email</Label>
-              <Input
-                id="email"
-                type="email"
-                placeholder="m@example.com"
-                required
-              />
-            </div>
-            <div className="grid gap-2">
-              <div className="flex items-center">
-                <Label htmlFor="password">Password</Label>
-                <Link href="/forgot-password" className="ml-auto inline-block text-sm underline">
-                  Forgot your password?
-                </Link>
+            <form action={loginAction}>
+              <div className="grid gap-2">
+                <Label htmlFor="email">Email</Label>
+                <Input
+                  id="email"
+                  type="email"
+                  name="email"
+                  placeholder="Email"
+                  required
+                />
               </div>
-              <Input id="password" type="password" required />
-            </div>
-            <Button type="submit" className="w-full">
-              Login
-            </Button>
+              <div className="grid gap-2">
+                <div className="flex items-center my-1">
+                  <Label htmlFor="password">Password</Label>
+                  <Link href="/forgot-password" className="ml-auto inline-block text-sm underline">
+                    Forgot your password?
+                  </Link>
+                </div>
+                <Input id="password" name="password" type="password" required />
+              </div>
+              <Button type="submit" className="w-full my-4">
+                Login
+              </Button>
+            </form>
             <Button variant="outline" className="w-full">
               Login with Google
             </Button>

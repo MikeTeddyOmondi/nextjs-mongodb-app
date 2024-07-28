@@ -1,7 +1,7 @@
 import { useActionState } from "react"
 import { redirect } from "next/navigation"
-import { signupUser } from "@/lib/actions";
-import { validateRequest } from "@/lib/lucia"
+import { auth } from "@/lib/appwrite/auth";
+// import { validateRequest } from "@/lib/lucia"
 import Link from "next/link"
 import {
   Card,
@@ -21,12 +21,19 @@ export default async function Signup() {
   //   return redirect("/")
   // }
   // const [state, action, isPending] = useActionState(signupUser, null)
+   
+  let user = await auth.getUser();
+
+  if (user) {
+    redirect("/");
+  }
 
   async function signupAction(formData) {
     "use server"
-    let data = Object.fromEntries(formData)
-    console.log({data})
-    const res = await signupUser(data)
+    // let data = Object.fromEntries(formData)
+    // console.log({data})
+    // const res = await signupUser(data)
+    const res = await auth.signupUser(formData) 
     console.log({res: res})
   } 
   
@@ -36,7 +43,7 @@ export default async function Signup() {
         <CardHeader>
           <CardTitle className="text-2xl">Sign Up</CardTitle>
           <CardDescription>
-            Enter your information to create your account
+            Create your account
           </CardDescription>
         </CardHeader>
         <CardContent>
