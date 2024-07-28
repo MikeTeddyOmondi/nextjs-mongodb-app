@@ -1,6 +1,6 @@
 "use client";
 import { useState } from "react";
-import { createTodo } from "@/actions";
+import { createTodo } from "@/lib/actions";
 
 export default function CreateTodo() {
   const [text, setText] = useState("");

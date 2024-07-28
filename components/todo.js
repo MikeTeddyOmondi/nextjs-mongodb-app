@@ -1,6 +1,6 @@
 "use client";
 import { useState } from "react";
-import { deleteTodo, updateTodo } from "@/actions";
+import { deleteTodo, updateTodo } from "@/lib/actions";
 
 export default function Todo({ text, id }) {
   const [showUpdateInput, setShowUpdateInput] = useState(false);
