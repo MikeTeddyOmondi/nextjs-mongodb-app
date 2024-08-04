@@ -12,11 +12,11 @@ export const metadata = {
 };
 
 export default async function RootLayout({ children }) {
-  let user = await auth.getUser();
+  // let user = await auth.getUser();
 
-  if (!user) {
-    redirect("/login");
-  } 
+  // if (!user) {
+  //   redirect("/login");
+  // } 
 
   return (
     <html lang="en">
